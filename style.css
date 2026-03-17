@@ -1,0 +1,208 @@
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-glass: rgba(255, 255, 255, 0);
+  --color-shadow: 0 0 25px rgb(72, 71, 71);
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  color: var(--color-white);
+}
+body {
+  background: url(test01.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  background-color: #000000;
+}
+.wrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 16px;
+}
+.heading {
+  text-align: center;
+  margin-bottom: 4em;
+}
+.heading h1 {
+  text-shadow: var(--color-shadow);
+  font-size: 5em;
+  font-weight: 800;
+  letter-spacing: 0.01px;
+}
+.heading h2 {
+  text-shadow: var(--color-shadow);
+  font-size: 4.5em;
+  font-weight: 800;
+  letter-spacing: 0.01px;
+}
+.heading h3 {
+  font-size: 2.5em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: var(--color-glass);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--color-shadow);
+  padding: 8px 30px;
+  display: inline-block;
+}
+.countdown {
+  width: 95vw;
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+.box {
+  width: 28vmin;
+  height: 29vmin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+}
+span.num {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(12px);
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 4em;
+  box-shadow: var(--color-shadow);
+  border-radius: 0.1em;
+}
+span.num:after {
+  content: "";
+  position: absolute;
+  background-color: var(--color-glass);
+  height: 100%;
+  width: 50%;
+  left: 0;
+}
+span.text {
+  font-size: 1em;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  display: block;
+  width: 80%;
+  position: relative;
+  text-align: center;
+  bottom: 20px;
+  padding: 0.7em 0;
+  font-weight: 600;
+  border-radius: 0.3em;
+  box-shadow: var(--color-shadow);
+}
+.label2{
+  font-size: 1.6em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background-color: var(--color-glass);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--color-shadow);
+  padding: 8px 30px;
+  display: inline-block;
+  
+}
+.label2{
+  font-size: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  position: fixed;
+  bottom: -150px;
+  right: -25px;
+}
+a.author{
+  font-size: 12px;
+  text-decoration: none;
+  color: #000000;
+  position: fixed;
+  bottom: -150px;
+  right: -10px;
+}
+.random-image {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  min-width: 350px;
+  min-height: 350px;
+  max-width: 350px;
+  max-height: 350px;
+  object-fit: contain;
+  animation: fadeInOut 4.5s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.5); }
+  15% { opacity: 1; transform: scale(1); }
+  85% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+ #start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease;
+    }
+    #start-btn {
+      padding: 20px 50px;
+      font-size: 24px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      color: #000;
+      background: #f3d163;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 30px rgba(243, 209, 99, 0.4);
+      transition: transform 0.2s;
+    }
+    #start-btn:hover {
+      transform: scale(1.1);
+      background: #fff;
+    }
+    /* ซ่อนเนื้อหาหลักไว้ก่อนกดปุ่ม */
+    #main-wrapper {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    /* เพิ่มโค้ดนี้ลงใน style.css */
+.qr-code-top-right {
+  position: fixed;
+  top: 20px;          /* ระยะห่างจากด้านบน */
+  right: 20px;        /* ระยะห่างจากด้านขวา */
+  width: 150px;       /* ปรับขนาดความกว้างตามต้องการ */
+  height: auto;
+  z-index: 100000;    /* ให้มั่นใจว่าอยู่เหนือ canvas และ overlay */
+  border: 3px solid var(--color-white); /* เพิ่มเส้นขอบเพื่อให้เด่นขึ้น */
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8); /* พื้นหลังขาวจางๆ ให้สแกนง่ายขึ้น */
+  padding: 5px;
+  pointer-events: auto; /* ตั้งค่าให้สามารถตอบสนองการคลิกได้ (ถ้ามี) */
+}
+
+/* ปรับขนาดสำหรับหน้าจอจอมือถือ */
+@media (max-width: 600px) {
+  .qr-code-top-right {
+    width: 100px;     /* ย่อขนาดลงเมื่อดูผ่านมือถือ */
+    top: 10px;
+    right: 10px;
+  }
+}
