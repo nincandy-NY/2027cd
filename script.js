@@ -4,8 +4,8 @@ let hrBox = document.getElementById("hr-box");
 let minBox = document.getElementById("min-box");
 let secBox = document.getElementById("sec-box");
 
-// ตั้งค่าเวลาสิ้นสุด
-let endDate = new Date(2027, 0, 1, 0,0); // ตัวอย่าง: สิ้นปี 2025
+// ตั้งค่าเวลาสิ้นสุด: 1 มกราคม 2027
+let endDate = new Date(2027, 0, 1, 0, 0);
 let endTime = endDate.getTime();
 
 let s10m = document.getElementById("sound-10min");
@@ -15,7 +15,6 @@ let s10s = document.getElementById("countdown_10s");
 let alert10 = false, alert5 = false, alert1 = false;
 let addZeroes = (num) => (num < 10 ? `0${num}` : num);
 
-// --- ฟังก์ชันควบคุม Overlay ---
 const startBtn = document.getElementById("start-btn");
 const startOverlay = document.getElementById("start-overlay");
 const mainWrapper = document.getElementById("main-wrapper");
@@ -27,13 +26,12 @@ function startEverything() {
         mainWrapper.style.opacity = "1";
     }, 800);
 
-    // เริ่มการทำงานทั้งหมด
     setInterval(countdown, 1000);
     countdown();
-    update();
+    update(); // เริ่มพลุ
     showSequentialImage();
     
-    // ปลดล็อก Audio Context สำหรับบางเบราว์เซอร์
+    // Unlock audio
     [s10m, s5m, s1m, s10s].forEach(s => {
         s.play().then(() => { s.pause(); s.currentTime = 0; }).catch(() => {});
     });
@@ -45,28 +43,17 @@ function playRepeatSound(audioElement) {
   let playCount = 0;
   const maxPlays = 3;
   const startPlaying = () => {
-    audioElement.play()
-      .then(() => {
-        playCount++;
-        console.log(`Playing count: ${playCount}`);
-      })
-      .catch(e => console.log("Audio blocked or file missing"));
+    audioElement.play().then(() => { playCount++; }).catch(e => console.log("Audio blocked"));
   };
-
   audioElement.onended = function() {
-    if (playCount < maxPlays) {
-      setTimeout(startPlaying, 1000);
-    } else {
-      audioElement.onended = null;
-    }
+    if (playCount < maxPlays) setTimeout(startPlaying, 1000);
   };
-  setTimeout(startPlaying, 500);
+  startPlaying();
 }
 
 function countdown() {
   let todayDate = new Date();
-  let todayTime = todayDate.getTime();
-  let remainingTime = endTime - todayTime;
+  let remainingTime = endTime - todayDate.getTime();
   let totalSecondsLeft = Math.floor(remainingTime / 1000);
 
   if (totalSecondsLeft <= 600 && !alert10) { playRepeatSound(s10m); alert10 = true; }
@@ -92,7 +79,7 @@ function countdown() {
   }
 }
 
-// --- Fireworks Logic (เหมือนเดิมแต่ย้ายการเรียกใช้ไปใน startEverything) ---
+// --- Fireworks Engine ---
 window.requestAnimFrame = (function () {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||
     function (callback) { window.setTimeout(callback, 1000 / 60); };
@@ -101,7 +88,7 @@ window.requestAnimFrame = (function () {
 var canvas = document.getElementById("canvas"),
   ctx = canvas.getContext("2d"),
   cw = window.innerWidth, ch = window.innerHeight,
-  fireworks = [], particles = [], hue = 120, timerTotal = 80, timerTick = 0;
+  fireworks = [], particles = [], hue = 120, timerTotal = 60, timerTick = 0;
 
 canvas.width = cw; canvas.height = ch;
 
@@ -192,15 +179,20 @@ let currentIndex = 0;
 function showSequentialImage() {
     let todayDate = new Date();
     let totalSecondsLeft = Math.floor((endTime - todayDate.getTime()) / 1000);
-    if (totalSecondsLeft <= 300) return; // 5 นาทีสุดท้ายหยุดโชว์รูป
+    if (totalSecondsLeft <= 300) return; 
 
     const img = document.createElement('img');
     img.src = imageSources[currentIndex];
     img.className = 'random-image';
-    const imgSize = 350;
-    img.style.left = `${Math.random() * (window.innerWidth - imgSize)}px`;
-    img.style.top = `${Math.random() * (window.innerHeight - imgSize)}px`;
     document.body.appendChild(img);
+
+    // คำนวณขอบเขตหลังรูปโหลดเสร็จ (เพื่อให้รู้ขนาดจริง)
+    img.onload = () => {
+        const maxX = window.innerWidth - img.offsetWidth;
+        const maxY = window.innerHeight - img.offsetHeight;
+        img.style.left = `${Math.max(0, Math.random() * maxX)}px`;
+        img.style.top = `${Math.max(0, Math.random() * maxY)}px`;
+    };
 
     currentIndex = (currentIndex + 1) % imageSources.length;
     setTimeout(() => img.remove(), 4500);
